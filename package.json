@@ -3,7 +3,7 @@
   "description": "Create Zooniverse subjedcts using Planet Labs API to get images by area of interest (AOI).",
   "license": "BSD-2-Clause",
   "scripts": {
-    "config": "cp src/config.dev.js src/config.js",
+    "config": "cp src/config.dev.js src/config.js && mkdir -p public/css public/js",
     "start": "sh serve.sh"
   },
   "dependencies": {
