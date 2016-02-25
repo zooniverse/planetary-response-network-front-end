@@ -1,0 +1,12 @@
+# Dev files
+node_modules
+npm-debug.log
+.DS_Store
+npm-debug.log
+
+# Configs
+src/config.js
+
+# Built assets
+public/js
+public/css
