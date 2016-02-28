@@ -1,7 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router';
+import LoginButton from '../components/LoginButton.js'
 
 export default class Header extends React.Component {
+
+
+  login() {
+    console.log('login(): Logging in user...');
+  }
+
   render() {
     return (
       <nav className="navbar navbar-default navbar-static-top">
@@ -19,7 +26,7 @@ export default class Header extends React.Component {
               <li><Link to="/settings">Settings</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li><Link to="/login">Login</Link></li>
+              <li><LoginButton login={this.login}/></li>
             </ul>
           </div>
         </div>
