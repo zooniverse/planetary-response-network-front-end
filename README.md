@@ -9,6 +9,9 @@ $ npm install
 # Scaffold config
 $ npm run config
 
+# Generate self-signed SSL certificate (Panoptes oAuth requires a https-based redirect target)
+$ npm run keygen
+
 # Watch and serve files
 $ npm start
 ```

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import LoginButton from '../components/LoginButton.js'
 import Panoptes from 'panoptes-client'
-import {panoptesAppId} from 'panoptes-config.json'
+import {panoptesAppId} from '../config.json'
 
 export default class Header extends React.Component {
 
@@ -10,7 +10,7 @@ export default class Header extends React.Component {
     console.log('login(): Logging in user...')
     console.log('PANOPTES = ', Panoptes);
     console.log('PANOPTES APP ID: ', panoptesAppId);
-    // return Panoptes.oauth.signIn(redirectUrl)
+    return Panoptes.oauth.signIn('https://localhost:3443')
   }
 
   render() {

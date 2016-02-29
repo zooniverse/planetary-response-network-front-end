@@ -5,10 +5,10 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import { IndexPage, UploadPage, BuildsPage, SettingsPage, LoginPage } from './pages';
 
 import { oauth } from 'panoptes-client';
-import { panoptesAppId } from './panoptes-config.json';
+import { panoptesAppId } from './config.json';
 
-// oauth.init(panoptesAppId)
-//   .then(function () {
+oauth.init(panoptesAppId)
+  .then(function () {
     ReactDOM.render(
       <Router history={createBrowserHistory()}>
         <Route path='/'         component={IndexPage}/>
@@ -19,6 +19,6 @@ import { panoptesAppId } from './panoptes-config.json';
       </Router>,
       document.getElementById('app-container')
     );
-  // });
+  });
 
 document.body.parentNode.classList.remove('no-js')

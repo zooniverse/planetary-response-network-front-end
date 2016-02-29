@@ -1,10 +1,11 @@
-import config from '../config'
+import {server, panoptesAppId} from '../config.json'
 import { Link } from 'react-router'
 import React, { PropTypes } from 'react'
 import DocumentTitle from 'react-document-title'
 import Header from './Header'
 
-const UPLOAD_TARGET = config.server + '/aois';
+const UPLOAD_TARGET = server + '/aois'
+import Panoptes from 'panoptes-client'
 
 export default class UploadPage extends React.Component {
   componentDidMount() {
