@@ -14,6 +14,12 @@ app.use(morgan('combined'))
 // Serve all other static assets
 app.use(express.static(__dirname + '/public'))
 
+
+// Handle all routes
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
 // Start server
 var port = process.env.PORT || 3737
 app.listen(port, function (error) {
