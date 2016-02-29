@@ -1,12 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from 'react'
+import { Link } from 'react-router'
 import LoginButton from '../components/LoginButton.js'
+import Panoptes from 'panoptes-client'
+import {panoptesAppId} from 'panoptes-config.json'
 
 export default class Header extends React.Component {
 
-
   login() {
-    console.log('login(): Logging in user...');
+    console.log('login(): Logging in user...')
+    console.log('PANOPTES = ', Panoptes);
+    console.log('PANOPTES APP ID: ', panoptesAppId);
+    // return Panoptes.oauth.signIn(redirectUrl)
   }
 
   render() {
