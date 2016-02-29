@@ -1,10 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router'
-import LoginButton from '../components/LoginButton.js'
 import Panoptes from 'panoptes-client'
 import {panoptesAppId} from '../config.json'
+import LoginButton from '../components/LoginButton.js'
+import LoggedInUser from '../components/LoggedInUser.js'
 
 export default class Header extends React.Component {
+
+  constructor() {
+    super();
+    this.state = { user: null };
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  componentDidMount() {
+    Panoptes.auth.checkCurrent()
+      .then(user => this.setState({user}));
+  }
 
   login() {
     console.log('login(): Logging in user...')
@@ -13,7 +26,13 @@ export default class Header extends React.Component {
     return Panoptes.oauth.signIn('https://localhost:3443')
   }
 
+  logout() {
+    Panoptes.oauth.signOut()
+      .then(user => this.setState({ user }));
+  }
+
   render() {
+    console.log('this.state.user = ', this.state.user);
     return (
       <nav className="navbar navbar-default navbar-static-top">
         <div className="container">
@@ -30,7 +49,11 @@ export default class Header extends React.Component {
               <li><Link to="/settings">Settings</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li><LoginButton login={this.login}/></li>
+              <li>
+                {this.state.user ?
+                  <LoggedInUser user={this.state.user} logout={this.logout}/> :
+                  <LoginButton login={this.login}/>}
+              </li>
             </ul>
           </div>
         </div>
