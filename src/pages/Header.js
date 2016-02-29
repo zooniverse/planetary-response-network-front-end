@@ -19,16 +19,41 @@ export default class Header extends React.Component {
       .then(user => this.setState({user}));
   }
 
+  // componentWillUpdate() {
+  //   console.log('*** COMPONENT WILL UPDATE ***');
+  //   Panoptes.auth.checkCurrent()
+  //     .then(function(user) {
+  //       console.log('USER: ', user);
+  //       console.log('SUBJECT SETS: ', this.state.subject_sets);
+  //       if(user && !this.state.subject_sets) {
+  //         this.fetchProjectData()
+  //       }
+  //
+  //     }.bind(this))
+  // }
+
   login() {
     console.log('login(): Logging in user...')
     console.log('PANOPTES = ', Panoptes);
     console.log('PANOPTES APP ID: ', panoptesAppId);
-    return Panoptes.oauth.signIn('https://localhost:3443')
+    Panoptes.oauth.signIn('https://localhost:3443').then(function(){
+    })
   }
 
   logout() {
     Panoptes.oauth.signOut()
       .then(user => this.setState({ user }));
+  }
+
+  fetchProjectData() {
+    if(this.state.user){
+      Panoptes.apiClient.type('projects').get('1586')
+      .then(function (project) {
+        console.log('THIS IS  ', this);
+        console.log('SUBJECT SETS: ', project.links.subject_sets);
+        this.setState({subject_sets: project.links.subject_sets})
+      }.bind(this))
+    }
   }
 
   render() {
