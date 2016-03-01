@@ -53,8 +53,11 @@ export default class UploadPage extends React.Component {
   }
 
   updateSelectedProject(el) {
-    console.log('updateSelectedProject(): ', el.target.value);
-    this.setState({ selectedProjectIndex: el.target.value })
+    console.log('updateSelectedProject(): ', el.target);
+    this.setState({
+      selectedProjectIndex: el.target.value,
+      selectedSubjectSetId: null
+    })
   }
 
   updateSelectedSubjectSet(el) {
@@ -62,8 +65,22 @@ export default class UploadPage extends React.Component {
     this.setState({ selectedSubjectSetId: el.target.value })
   }
 
+  renderProjectSelector() {
+    console.log('renderProjectSelector() selectedSubjectSetId = ', this.state.selectedSubjectSetId);
+    return(
+      <select defaultValue='' onChange={this.updateSelectedProject} name="project">
+        <option value='' disabled>-- select a project --</option>
+        { this.state.projects.map(function(project, key){
+            return(<option key={key} displaName={project.display_name} value={key}>{project.display_name}</option>)
+          }) }
+      </select>
+    )
+  }
+
   renderSubjectSetSelector() {
+    console.log('renderSubjectSetSelector() selectedSubjectSetId = ', this.state.selectedSubjectSetId);
     var selectedProjectIndex = this.state.selectedProjectIndex
+    var selectedSubjectSetId = this.state.selectedSubjectSetId
 
     if(!selectedProjectIndex || !this.state.projects){return}
 
@@ -84,35 +101,28 @@ export default class UploadPage extends React.Component {
         return(<option key={key} value={subject_set}>{subject_set}</option>)
       })
 
-    // for(var subject_set in projects[selectedProjectIndex].links.subject_sets){
-    //   console.log('SUBJECT SET: ', subject_set);
-    // }
+    console.log('SELECTED SUBJECT SET ID: ', this.state.selectedSubjectSetId)
 
     return(
-      <select defaultValue='default' onChange={this.updateSelectedSubjectSet} name="subject-set" {...subjectSetOpts}>
+      <select defaultValue='default' value={selectedSubjectSetId ? selectedSubjectSetId : 'default'} onChange={this.updateSelectedSubjectSet} name="subject-set" {...subjectSetOpts}>
         <option value='default' disabled>-- select a subject set --</option>
-        {subject_sets}
+        { this.state.projects ? subject_sets : null }
       </select>
     )
   }
 
   renderUploader() {
-    console.log('renderUploader()');
+    console.log('renderUploader() STATE = ', this.state);
     if(!this.state.projects){return}
 
-    if(this.state.selectedProjectIndex){
-      console.log('PROJECT:', this.state.projects[this.state.selectedProjectIndex].links.subject_sets);
-    }
+    // if(this.state.selectedProjectIndex){
+    //   console.log('PROJECT:', this.state.projects[this.state.selectedProjectIndex].links.subject_sets);
+    // }
 
     return(
       <span>
         <label>Use project: &nbsp; </label>
-        <select defaultValue='' onChange={this.updateSelectedProject} name="project">
-          <option value='' disabled>-- select a project --</option>
-          { this.state.projects.map(function(project, key){
-              return(<option key={key} displaName={project.display_name} value={key}>{project.display_name}</option>)
-            }) }
-        </select>
+        {this.renderProjectSelector()}
 
         <br/>
         <label>Upload to subject set: &nbsp; </label>
