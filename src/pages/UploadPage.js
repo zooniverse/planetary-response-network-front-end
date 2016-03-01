@@ -25,7 +25,7 @@ export default class UploadPage extends React.Component {
   }
 
   componentWillUpdate() {
-    console.log('*** COMPONENT WILL UPDATE ***');
+    // console.log('*** COMPONENT WILL UPDATE ***');
     Panoptes.auth.checkCurrent()
       .then(function(user) {
         if(user && !this.state.projects) {
@@ -53,7 +53,6 @@ export default class UploadPage extends React.Component {
   }
 
   updateSelectedProject(el) {
-    console.log('updateSelectedProject(): ', el.target);
     this.setState({
       selectedProjectIndex: el.target.value,
       selectedSubjectSetId: null
@@ -61,64 +60,56 @@ export default class UploadPage extends React.Component {
   }
 
   updateSelectedSubjectSet(el) {
-    console.log('updateSelectedSubjectSet()');
     this.setState({ selectedSubjectSetId: el.target.value })
   }
 
   renderProjectSelector() {
-    console.log('renderProjectSelector() selectedSubjectSetId = ', this.state.selectedSubjectSetId);
+    var projects = this.state.projects
+    var selectedProjectIndex = this.state.selectedProjectIndex
+    var projectOptions = projects ?
+      projects.map(function(project, key){
+        return(<option key={key} displaName={project.display_name} value={key}>{project.display_name}</option>)
+      }) : null
+
+    var defaultText = projects ? '-- Select a project --' : '-- No projects avaiable --'
+    var value = selectedProjectIndex ? selectedProjectIndex : 'default'
+
     return(
-      <select defaultValue='' onChange={this.updateSelectedProject} name="project">
-        <option value='' disabled>-- select a project --</option>
-        { this.state.projects.map(function(project, key){
-            return(<option key={key} displaName={project.display_name} value={key}>{project.display_name}</option>)
-          }) }
+      <select defaultValue='default' value={value} onChange={this.updateSelectedProject} name="project">
+        <option value='default' disabled>{defaultText}</option>
+        {projectOptions}
       </select>
     )
   }
 
   renderSubjectSetSelector() {
-    console.log('renderSubjectSetSelector() selectedSubjectSetId = ', this.state.selectedSubjectSetId);
     var selectedProjectIndex = this.state.selectedProjectIndex
     var selectedSubjectSetId = this.state.selectedSubjectSetId
-
-    if(!selectedProjectIndex || !this.state.projects){return}
-
-    console.log('SELECTED PROJECT INDEX = ', selectedProjectIndex);
     var projects = this.state.projects
-    var subjectSetOpts = {}
-    if(!selectedProjectIndex){
-      console.log('DISABLED!');
-      subjectSetOpts['disabled']='disabled'
-    } else {
-      console.log('NOT DISABLED!');
-      subjectSetOpts['disabled']=''
+
+    if(projects && selectedProjectIndex) {
+      var subjectSets = projects[selectedProjectIndex].links.subject_sets
     }
 
-    var subject_sets =
+    /* Generate subject set options, or null if none available */
+    var subjectSetOptions = subjectSets ?
       projects[selectedProjectIndex].links.subject_sets.map(function(subject_set, key){
-        console.log('SUBJECT SET: ', subject_set);
         return(<option key={key} value={subject_set}>{subject_set}</option>)
-      })
+      }) : null
 
-    console.log('SELECTED SUBJECT SET ID: ', this.state.selectedSubjectSetId)
+    var value = selectedSubjectSetId ? selectedSubjectSetId : 'default'
+    var disabled = selectedProjectIndex ? '' : 'disabled'
+    var defaultText = subjectSetOptions ? '-- Select a subject set --' : '-- No subject sets available --'
 
     return(
-      <select defaultValue='default' value={selectedSubjectSetId ? selectedSubjectSetId : 'default'} onChange={this.updateSelectedSubjectSet} name="subject-set" {...subjectSetOpts}>
-        <option value='default' disabled>-- select a subject set --</option>
-        { this.state.projects ? subject_sets : null }
+      <select defaultValue='default' value={value} onChange={this.updateSelectedSubjectSet} name='subject-set' disabled={disabled}>
+        <option value='default' disabled>{defaultText}</option>
+        {subjectSetOptions}
       </select>
     )
   }
 
   renderUploader() {
-    console.log('renderUploader() STATE = ', this.state);
-    if(!this.state.projects){return}
-
-    // if(this.state.selectedProjectIndex){
-    //   console.log('PROJECT:', this.state.projects[this.state.selectedProjectIndex].links.subject_sets);
-    // }
-
     return(
       <span>
         <label>Use project: &nbsp; </label>
@@ -149,7 +140,6 @@ export default class UploadPage extends React.Component {
             {this.state.user ?
               this.renderUploader() :
               <p><strong>Please log in to upload a file.</strong></p>}
-
           </div>
         </div>
       </DocumentTitle>
