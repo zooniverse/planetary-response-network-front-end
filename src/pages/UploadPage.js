@@ -11,9 +11,11 @@ export default class UploadPage extends React.Component {
 
   constructor() {
     super();
-    this.state = { user: null };
+    this.state = { user: null, selectedProjectIndex: null, selectedSubjectSetId: null };
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.updateSelectedProject = this.updateSelectedProject.bind(this);
+    this.updateSelectedSubjectSet = this.updateSelectedSubjectSet.bind(this);
   }
 
   componentDidMount() {
@@ -33,9 +35,6 @@ export default class UploadPage extends React.Component {
   }
 
   login() {
-    console.log('login(): Logging in user...')
-    console.log('PANOPTES = ', Panoptes);
-    console.log('PANOPTES APP ID: ', panoptesAppId);
     Panoptes.oauth.signIn('https://localhost:3443')
   }
 
@@ -48,41 +47,77 @@ export default class UploadPage extends React.Component {
     if(this.state.user){
       Panoptes.apiClient.type('projects').get( {owner: this.state.user.display_name} )
         .then(function (projects) {
-          // console.log('SUBJECT SETS: ', project.links.subject_sets);
           this.setState({projects: projects})
-          console.log('THIS IS ', this);
         }.bind(this))
      }
   }
 
-  updateSelectedProject() {
-    console.log('updateSelectedProject()');
+  updateSelectedProject(el) {
+    console.log('updateSelectedProject(): ', el.target.value);
+    this.setState({ selectedProjectIndex: el.target.value })
+  }
+
+  updateSelectedSubjectSet(el) {
+    console.log('updateSelectedSubjectSet()');
+    this.setState({ selectedSubjectSetId: el.target.value })
+  }
+
+  renderSubjectSetSelector() {
+    var selectedProjectIndex = this.state.selectedProjectIndex
+
+    if(!selectedProjectIndex || !this.state.projects){return}
+
+    console.log('SELECTED PROJECT INDEX = ', selectedProjectIndex);
+    var projects = this.state.projects
+    var subjectSetOpts = {}
+    if(!selectedProjectIndex){
+      console.log('DISABLED!');
+      subjectSetOpts['disabled']='disabled'
+    } else {
+      console.log('NOT DISABLED!');
+      subjectSetOpts['disabled']=''
+    }
+
+    var subject_sets =
+      projects[selectedProjectIndex].links.subject_sets.map(function(subject_set, key){
+        console.log('SUBJECT SET: ', subject_set);
+        return(<option key={key} value={subject_set}>{subject_set}</option>)
+      })
+
+    // for(var subject_set in projects[selectedProjectIndex].links.subject_sets){
+    //   console.log('SUBJECT SET: ', subject_set);
+    // }
+
+    return(
+      <select defaultValue='default' onChange={this.updateSelectedSubjectSet} name="subject-set" {...subjectSetOpts}>
+        <option value='default' disabled>-- select a subject set --</option>
+        {subject_sets}
+      </select>
+    )
   }
 
   renderUploader() {
+    console.log('renderUploader()');
+    if(!this.state.projects){return}
+
+    if(this.state.selectedProjectIndex){
+      console.log('PROJECT:', this.state.projects[this.state.selectedProjectIndex].links.subject_sets);
+    }
+
     return(
       <span>
-        <p><strong>Upload a KML file</strong></p>
         <label>Use project: &nbsp; </label>
-        <select onChange={this.updateSelectedProject} name="project">
-          <option value='foo'>Foo</option>
-          <option value='bar'>Bar</option>
-
-          { /*this.state.projects.map(function(project, i){
-              return(<option value={subject_set}>{subject_set}</option>)
-            })*/ }
+        <select defaultValue='' onChange={this.updateSelectedProject} name="project">
+          <option value='' disabled>-- select a project --</option>
+          { this.state.projects.map(function(project, key){
+              return(<option key={key} displaName={project.display_name} value={key}>{project.display_name}</option>)
+            }) }
         </select>
 
         <br/>
         <label>Upload to subject set: &nbsp; </label>
-        <select onChange={this.updateSelectedProject} name="subject-set">
-          <option value='foo'>Foo</option>
-          <option value='bar'>Bar</option>
 
-          { /*this.state.projects.map(function(project, i){
-              return(<option value={subject_set}>{subject_set}</option>)
-            })*/ }
-        </select>
+        {this.renderSubjectSetSelector()}
 
         <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET} className='uploader'>
           <label htmlFor='file'>Drop a file here, or click to browse</label>
