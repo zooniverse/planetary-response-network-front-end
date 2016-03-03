@@ -66,7 +66,7 @@ export default class UploadPage extends React.Component {
   updateSelectedSubjectSet(el) {
     this.setState({
       subjectSetKey: el.target.value
-    }
+    })
   }
 
   renderProjectSelector() {
