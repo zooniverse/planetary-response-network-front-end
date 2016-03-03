@@ -3,11 +3,13 @@
   "description": "Create Zooniverse subjedcts using Planet Labs API to get images by area of interest (AOI).",
   "license": "BSD-2-Clause",
   "scripts": {
-    "config": "cp src/config.dev.js src/config.js && mkdir -p public/css public/js",
+    "config": "cp src/config.dev.json src/config.json && mkdir -p public/css public/js",
+    "keygen": "openssl req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj '/C=GB/ST=/L=/O=Zooniverse/OU=/CN=localhost' && openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt && rm server.csr && echo 'Generated key server.key, certificate server.crt'",
     "start": "sh serve.sh"
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
+    "json-loader": "^0.5.4",
     "react": "^0.14.7",
     "react-document-title": "^2.0.1",
     "react-dom": "^0.14.7",
@@ -29,6 +31,7 @@
     "style-loader": "^0.13.0",
     "stylus-loader": "^1.5.1",
     "webpack-dev-middleware": "^1.5.1",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "panoptes-client": "zooniverse/panoptes-javascript-client#d97cbc1"
   }
 }
