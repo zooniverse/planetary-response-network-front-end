@@ -1,0 +1,48 @@
+$GREEN = #abebc6
+$BLUE_GRAY = #d4e6f1
+$RED = #f1948a
+.build-progress
+
+.build-checklist
+  ul
+    list-style none
+    li
+      width 300px
+      border-style solid
+      border-color black
+      border-radius 8px
+      border-width 2px
+      background-color $BLUE_GRAY //#82e0aa//#aed6f1
+      padding 6px
+      margin 2px
+      color #000
+      opacity 0.25
+      &:before
+        padding-right 8px
+        visibility hidden
+        content "\2713" // checkmark
+      &.done
+        opacity 1.0
+        background-color $GREEN
+        &:before
+          content "\2713"
+          visibility visible
+          color green
+      &.error
+        opacity 1.0
+        background-color $RED
+        &:before
+          content "\2718"
+          visibility visible
+          color red
+      &.in-progress
+        opacity 1.0
+        animation glowing 2000ms infinite
+
+@keyframes glowing
+  from
+    background-color $BLUE_GRAY
+  50%
+    background-color #5dade2
+  to
+    background-color $BLUE_GRAY
