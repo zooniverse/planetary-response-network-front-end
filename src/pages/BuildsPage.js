@@ -8,14 +8,18 @@ import io from 'socket.io-client'
 export default class BuildsPage extends React.Component {
 
   componentWillMount() {
-      this.socket = io('http://localhost:3736')
-      this.socket.on('connect', this.connect())
+      this.socket = io.connect('http://localhost:3736')
+      // this.socket.on('connect', this.connect(this.socket))
+      this.socket.on('build status', this.updateBuildStatus)
   }
+  // connect() {
+  //   console.log('CONNECTED TO SOCKET: ', this.socket)
+  //   // console.log('Connected with socket ID: ', this.socket.id)
+  //   // alert('Connected with socket ID: ', this.socket.id)
+  // }
 
-  connect() {
-    window.socket = this.socket
-    console.log('Connected with socket ID: ', this.socket);
-    alert('Connected with socket ID: ', this.socket.id)
+  updateBuildStatus(payload) {
+    console.log('updateBuildStatus()', payload)
   }
 
   render() {
