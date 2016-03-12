@@ -7,6 +7,12 @@ import io from 'socket.io-client'
 
 export default class BuildsPage extends React.Component {
 
+  constructor() {
+    super()
+    this.state = { status: null }
+    this.updateBuildStatus = this.updateBuildStatus.bind(this)
+  }
+
   componentWillMount() {
       this.socket = io.connect('http://localhost:3736')
       // this.socket.on('connect', this.connect(this.socket))
@@ -19,7 +25,8 @@ export default class BuildsPage extends React.Component {
   // }
 
   updateBuildStatus(payload) {
-    console.log('updateBuildStatus()', payload)
+    console.log('updateBuildStatus()', payload.status)
+    this.setState({status: payload.status})
   }
 
   render() {
@@ -36,7 +43,7 @@ export default class BuildsPage extends React.Component {
                   Current Build Status
                 </strong>
               </p>
-              <BuildProgress />
+              <BuildProgress status={this.state.status} />
             </div>
           </div>
         </div>
