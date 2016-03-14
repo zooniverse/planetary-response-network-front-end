@@ -13,19 +13,16 @@ window.checklist = checklist
 
 export default class ProgressChecklist extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps() nextProps = ', nextProps);
-  }
-
   render() {
-    console.log('************* PROPS: ', this.props);
     return (
       <div className='build-progress'>
         <ul className='build-checklist'>
-          {checklist.map(function(task,i){
-            // console.log('INDEX OF: ', checklist.indexOf(task));
-            var taskStatus = (task.name == this.props.status) ? 'in-progress' : ''
-            return <li className={taskStatus}>{task.title}</li>
+          {checklist.map(function(task,key){
+            var taskStatus = ''
+            if( typeof this.props.status !== undefined && this.props.status !== null){
+              taskStatus = this.props.status[task.name].status
+            }
+            return <li key={key} className={taskStatus}>{task.title}</li>
           }.bind(this))}
         </ul>
       </div>
