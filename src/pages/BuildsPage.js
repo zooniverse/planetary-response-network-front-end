@@ -14,13 +14,18 @@ export default class BuildsPage extends React.Component {
   }
 
   componentWillMount() {
-      this.socket = io.connect('http://localhost:3736')
-      this.socket.on('build status', this.updateBuildStatus)
+    // this.socket = io.connect('https://localhost:3736', {secure: true})
+    this.socket = io.connect('http://localhost:3736', {secure: true})
+
+    this.socket.on('build status', this.updateBuildStatus)
+    this.socket.on('connect', function(){
+      console.log('Socket connected!');
+    })
   }
 
   updateBuildStatus(payload) {
-    // console.log('updateBuildStatus()', payload)
-    this.setState({status: payload})
+    console.log('updateBuildStatus()', payload)
+    this.setState({status: JSON.parse(payload) })
   }
 
   render() {

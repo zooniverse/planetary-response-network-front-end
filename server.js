@@ -30,6 +30,7 @@ app.listen(port, function (error) {
   console.log('Server listening on port:', port);
 });
 
+
 var key = fs.readFileSync('server.key')
 var cert = fs.readFileSync('server.crt')
 
