@@ -4,6 +4,7 @@ import DocumentTitle from 'react-document-title';
 import Header from './Header'
 import BuildProgress from '../components/BuildProgress'
 import io from 'socket.io-client'
+import config from '../config.json'
 
 export default class BuildsPage extends React.Component {
 
@@ -14,12 +15,11 @@ export default class BuildsPage extends React.Component {
   }
 
   componentWillMount() {
-    // this.socket = io.connect('https://localhost:3736', {secure: true})
-    this.socket = io.connect('http://localhost:3736', {secure: true})
-
-    this.socket.on('build status', this.updateBuildStatus)
+    var subChannel = 'status_'+this.props.location.query.job_id
+    this.socket = io.connect(config.server, {secure: true})
+    this.socket.on(subChannel, this.updateBuildStatus)
     this.socket.on('connect', function(){
-      console.log('Socket connected!');
+      console.log('Socket connected. Listening to channel: ', subChannel);
     })
   }
 
@@ -41,6 +41,8 @@ export default class BuildsPage extends React.Component {
                 <strong>
                   Current Build Status
                 </strong>
+                {' '}
+                ({this.props.location.query.job_id})
               </p>
               <BuildProgress status={this.state.status} />
             </div>
