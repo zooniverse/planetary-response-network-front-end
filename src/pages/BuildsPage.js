@@ -2,8 +2,32 @@ import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 import DocumentTitle from 'react-document-title';
 import Header from './Header'
+import BuildProgress from '../components/BuildProgress'
+import io from 'socket.io-client'
+import config from '../config.json'
 
 export default class BuildsPage extends React.Component {
+
+  constructor() {
+    super()
+    this.state = { status: null }
+    this.updateBuildStatus = this.updateBuildStatus.bind(this)
+  }
+
+  componentWillMount() {
+    var subChannel = 'status_'+this.props.location.query.job_id
+    this.socket = io.connect(config.server, {secure: true})
+    this.socket.on(subChannel, this.updateBuildStatus)
+    this.socket.on('connect', function(){
+      console.log('Socket connected. Listening to channel: ', subChannel);
+    })
+  }
+
+  updateBuildStatus(payload) {
+    console.log('updateBuildStatus()', payload)
+    this.setState({status: JSON.parse(payload) })
+  }
+
   render() {
     return (
       <DocumentTitle title='AOI Uploader'>
@@ -15,12 +39,12 @@ export default class BuildsPage extends React.Component {
             <div className='jumbotron'>
               <p>
                 <strong>
-                  Your current builds should be displayed here.
+                  Current Build Status
                 </strong>
+                {' '}
+                ({this.props.location.query.job_id})
               </p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam pulvinar porttitor massa ut fermentum. Phasellus ac augue at libero auctor eleifend a id mi. Sed leo lorem, feugiat ut velit vitae, rhoncus semper dui. Aenean placerat risus vitae hendrerit sodales. Praesent gravida magna eget quam egestas, eget ornare enim malesuada. Suspendisse eros orci, dignissim convallis tincidunt et, venenatis eget dui. Nam a tellus semper leo vestibulum porta eget in elit. Nullam suscipit neque id felis ullamcorper semper. Ut lacus tellus, luctus nec ullamcorper ac, blandit ut lorem. Nam egestas, massa sit amet auctor aliquet, sem tellus vestibulum neque, quis tristique erat justo id leo. Duis faucibus elementum enim ut porttitor. Phasellus tempor libero id lacus aliquet, eu fermentum sapien malesuada. Aliquam erat volutpat. Sed vel feugiat dolor, vitae consequat quam.
-              </p>
+              <BuildProgress status={this.state.status} />
             </div>
           </div>
         </div>
