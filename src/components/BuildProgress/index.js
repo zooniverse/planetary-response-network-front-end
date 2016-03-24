@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 var checklist = [
     { name: 'fetching_mosaics',    title: 'Fetching mosaics' },
     { name: 'tilizing_mosaics',    title: 'Tilizing mosaic images' },
-    { name: 'generating_manifest', title: 'Generating subject manifest' },
     { name: 'uploading_images',    title: 'Uploading images' },
     { name: 'deploying_subjects',  title: 'Deploying subjects' },
     { name: 'finished',            title: 'Build completed successfully' }
