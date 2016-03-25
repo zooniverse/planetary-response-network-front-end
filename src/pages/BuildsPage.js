@@ -5,27 +5,44 @@ import Header from './Header'
 import BuildProgress from '../components/BuildProgress'
 import io from 'socket.io-client'
 import config from '../config.json'
+import builds from '../lib/builds'
 
 export default class BuildsPage extends React.Component {
 
   constructor() {
     super()
     this.state = { status: null }
-    this.updateBuildStatus = this.updateBuildStatus.bind(this)
   }
 
   componentWillMount() {
-    var subChannel = 'status_'+this.props.location.query.job_id
-    this.socket = io.connect(config.server, {secure: true})
-    this.socket.on(subChannel, this.updateBuildStatus)
-    this.socket.on('connect', function(){
-      console.log('Socket connected. Listening to channel: ', subChannel);
+    // Fetch builds
+    builds.findAll((err, builds) => {
+      console.log('builds', builds)
+      if (err) throw err
+      this.setState({ builds })
     })
   }
 
   updateBuildStatus(payload) {
     console.log('updateBuildStatus()', payload)
     this.setState({status: JSON.parse(payload) })
+  }
+
+  renderBuildList() {
+    if (this.state.builds) {
+      let builds = this.state.builds.map((build, i) => {
+        return (
+          <li key={i}>
+            <Link to={'builds/'+build.id}>{build.id}</Link>
+          </li>
+        )
+      })
+      return (
+        <ul>
+          {builds}
+        </ul>
+      )
+    }
   }
 
   render() {
@@ -37,14 +54,8 @@ export default class BuildsPage extends React.Component {
             <h2 className='text-center'>Current Builds</h2>
             <hr />
             <div className='jumbotron'>
-              <p>
-                <strong>
-                  Current Build Status
-                </strong>
-                {' '}
-                ({this.props.location.query.job_id})
-              </p>
-              <BuildProgress status={this.state.status} />
+              {this.renderBuildList()}
+              {this.props.children}
             </div>
           </div>
         </div>

@@ -130,12 +130,30 @@ export default class UploadPage extends React.Component {
         <label>Upload to subject set: &nbsp; </label>
         {this.renderSubjectSetSelector()}
 
-        <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET} className='uploader'>
-          <label htmlFor='file'>Drop a file here, or click to browse</label>
-          <input name='project_id' value={project_id} type='hidden'/>
-          <input name='subject_set_id' value={subject_set_id} type='hidden'/>
-          <input disabled={disabled} id='file' type='file' name='file'/>
+        <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET}>
+          <label>Number of times to repeat build &nbsp; </label>
+          <select id='repeat' name='repeat'>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          </select>
+          <br/>
+          <label>Interval between builds &nbsp; </label>
+          <select id='interval' name='interval'>
+          <option value='60'>1 min</option>
+          <option value='300'>5 mins</option>
+          <option value='3600'>1 hour</option>
+          <option value='86400'>1 day</option>
+          </select>
+          <div className='uploader'>
+            <label htmlFor='file'>Drop a file here, or click to browse</label>
+            <input name='project_id' value={project_id} type='hidden'/>
+            <input name='subject_set_id' value={subject_set_id} type='hidden'/>
+            <input disabled={disabled} id='file' type='file' name='file'/>
             <button type='submit'>Upload</button>
+          </div>
         </form>
       </span>
     )
