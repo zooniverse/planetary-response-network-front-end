@@ -19,6 +19,7 @@ export default class Build extends React.Component {
 
   componentWillMount() {
     // Fetch build
+    this.subscribeToJob(this.props.params.id)
     builds.findById(this.props.params.id, (err, build) => {
       if (err) throw err
       this.setState({ build })
@@ -53,7 +54,6 @@ export default class Build extends React.Component {
   }
 
   updateBuildStatus(payload) {
-    console.log('updateBuildStatus()', payload)
     var updatedBuild = Object.assign(this.state.build, { status: JSON.parse(payload) })
     this.setState({
       build: updatedBuild
