@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router'
-import {panoptesAppId} from '../config.json'
 import LoginButton from '../components/LoginButton.js'
 import LoggedInUser from '../components/LoggedInUser.js'
 import auth from '../lib/auth.js'
