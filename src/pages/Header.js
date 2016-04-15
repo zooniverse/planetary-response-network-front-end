@@ -1,32 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router'
-import Panoptes from 'panoptes-client'
 import {panoptesAppId} from '../config.json'
 import LoginButton from '../components/LoginButton.js'
 import LoggedInUser from '../components/LoggedInUser.js'
+import auth from '../lib/auth.js'
 
 export default class Header extends React.Component {
 
   constructor() {
     super();
     this.state = { user: null };
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
-    Panoptes.auth.checkCurrent()
+    auth.getUser()
       .then(user => this.setState({user}));
-  }
-
-  login() {
-    Panoptes.oauth.signIn('https://localhost:3443').then(function(){
-    })
-  }
-
-  logout() {
-    Panoptes.oauth.signOut()
-      .then(user => this.setState({ user }));
   }
 
   render() {
@@ -49,8 +37,8 @@ export default class Header extends React.Component {
             <ul className="nav navbar-nav navbar-right">
               <li>
                 {this.state.user ?
-                  <LoggedInUser user={this.state.user} logout={this.logout}/> :
-                  <LoginButton login={this.login}/>}
+                  <LoggedInUser user={this.state.user} logout={auth.logout.bind(auth)}/> :
+                  <LoginButton login={auth.login.bind(auth)}/>}
               </li>
             </ul>
           </div>

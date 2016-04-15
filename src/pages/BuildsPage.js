@@ -5,7 +5,7 @@ import Header from './Header'
 import BuildProgress from '../components/BuildProgress'
 import io from 'socket.io-client'
 import config from '../config.json'
-import builds from '../lib/builds'
+import prnClient from '../lib/prn-client'
 
 export default class BuildsPage extends React.Component {
 
@@ -16,11 +16,16 @@ export default class BuildsPage extends React.Component {
 
   componentWillMount() {
     // Fetch builds
-    builds.findAll((err, builds) => {
-      console.log('builds', builds)
-      if (err) throw err
-      this.setState({ builds })
-    })
+    // builds.findAll((err, builds) => {
+    //   console.log('builds', builds)
+    //   if (err) throw err
+    //   this.setState({ builds })
+    // })
+    prnClient.get('builds')
+      .then(
+        builds => this.setState({ builds }),
+        reason => alert('There was an error fetching your builds')
+      )
   }
 
   updateBuildStatus(payload) {

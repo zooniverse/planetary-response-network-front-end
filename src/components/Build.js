@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import BuildProgress from './BuildProgress'
 import io from 'socket.io-client'
 import config from '../config.json'
-import builds from '../lib/builds'
+import prnClient from '../lib/prn-client'
 
 const socket = io.connect(config.server, {secure: true})
 
@@ -17,25 +17,30 @@ export default class Build extends React.Component {
     this.updateBuildStatus = this.updateBuildStatus.bind(this)
   }
 
+  setBuildById(id) {
+    prnClient.get('builds')
+      .then(
+        builds => {
+          let build = builds.filter(build => {
+            return build.id === id
+          })
+          this.setState({ build: build.pop() })
+        },
+        reason => alert('Build #'+id+' doesn\'t exist')
+      )
+  }
+
   componentWillMount() {
     // Fetch build
     this.subscribeToJob(this.props.params.id)
-    builds.findById(this.props.params.id, (err, build) => {
-      if (err) throw err
-      this.setState({ build })
-    })
+    this.setBuildById(this.props.params.id)
   }
 
   componentWillReceiveProps(newProps, oldProps) {
     if (!oldProps.params || oldProps.params.id !== newProps.params.id) {
       if (oldProps.params && oldProps.params.id) this.unsubscribeFromJob(oldProps.params.id);
       this.subscribeToJob(newProps.params.id)
-      builds.findById(newProps.params.id, (err, build) => {
-        if (err) throw err
-        this.setState({
-          build: build
-        })
-      })
+      this.setBuildById(this.props.params.id)
     }
   }
 

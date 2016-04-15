@@ -10,8 +10,15 @@ class Builds {
 	}
 
 	findAll(callback) {
-		xhr(config.server+'/builds', (err, resp, builds) => {
-			if (err) callback(err)
+		xhr({
+			url: config.server+'/builds',
+			withCredentials: true
+		}, (err, resp, builds) => {
+			if (err) return callback(err)
+			if (resp.statusCode < 200 || resp.statusCode >= 400) {
+				err = new Error(resp.body)
+				return callback(err)
+			}
 			try {
 				builds = JSON.parse(builds)
 			} catch(e) {

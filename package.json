@@ -10,6 +10,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "json-loader": "^0.5.4",
+    "querystring": "^0.2.0",
     "react": "^0.14.7",
     "react-document-title": "^2.0.1",
     "react-dom": "^0.14.7",

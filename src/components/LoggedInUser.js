@@ -6,7 +6,7 @@ export default class LoggedInUser extends React.Component {
     const classNames = 'btn btn-default navbar-btn navbar-right';
     const logout = this.props.logout;
     return (
-      <button className={classNames} onClick={logout}>Log out {this.props.user.login}</button>
+      <button className={classNames} onClick={logout}>Log out {this.props.user.displayName}</button>
     );
   }
 

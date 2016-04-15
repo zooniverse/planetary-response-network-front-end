@@ -3,7 +3,8 @@ import { Link } from 'react-router'
 import React, { PropTypes } from 'react'
 import DocumentTitle from 'react-document-title'
 import Header from './Header'
-import Panoptes from 'panoptes-client'
+import auth from '../lib/auth'
+import prnClient from '../lib/prn-client'
 
 const UPLOAD_TARGET = server + '/aois'
 
@@ -16,40 +17,29 @@ export default class UploadPage extends React.Component {
       projectKey: null,
       subjectSetKey: null
     }
-    this.login = this.login.bind(this)
-    this.logout = this.logout.bind(this)
     this.updateSelectedProject = this.updateSelectedProject.bind(this)
     this.updateSelectedSubjectSet = this.updateSelectedSubjectSet.bind(this)
   }
 
   componentDidMount() {
     console.log(UPLOAD_TARGET) // for uploading aois
-    Panoptes.auth.checkCurrent()
-      .then(user => this.setState({user}))
+    auth.getUser()
+      .then(user => this.setState({user}));
   }
 
   componentWillUpdate() {
     // console.log('*** COMPONENT WILL UPDATE ***');
-    Panoptes.auth.checkCurrent()
-      .then(function(user) {
+    auth.getUser()
+      .then(user => {
         if(user && !this.state.projects) {
           this.fetchUserProjects()
         }
-      }.bind(this))
-  }
-
-  login() {
-    Panoptes.oauth.signIn('https://localhost:3443')
-  }
-
-  logout() {
-    Panoptes.oauth.signOut('http://www.google.com')
-      .then(user => this.setState({ user }));
+      })
   }
 
   fetchUserProjects() {
     if(this.state.user){
-      Panoptes.apiClient.type('projects').get( {owner: this.state.user.display_name} )
+      prnClient.get('projects', {owner: this.state.user.display_name} )
         .then(function (projects) {
           this.setState({projects: projects})
         }.bind(this))
