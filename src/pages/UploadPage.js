@@ -1,11 +1,12 @@
-import {server, panoptesAppId} from '../config.json'
+import {server} from '../config.json'
 import { Link } from 'react-router'
 import React, { PropTypes } from 'react'
 import DocumentTitle from 'react-document-title'
 import Header from './Header'
-import Panoptes from 'panoptes-client'
+import auth from '../lib/auth'
+import prnClient from '../lib/prn-client'
 
-const UPLOAD_TARGET = server + '/aois'
+const UPLOAD_TARGET = server + '/aois?redirect=https://localhost:3443/builds'
 
 export default class UploadPage extends React.Component {
 
@@ -16,40 +17,29 @@ export default class UploadPage extends React.Component {
       projectKey: null,
       subjectSetKey: null
     }
-    this.login = this.login.bind(this)
-    this.logout = this.logout.bind(this)
     this.updateSelectedProject = this.updateSelectedProject.bind(this)
     this.updateSelectedSubjectSet = this.updateSelectedSubjectSet.bind(this)
   }
 
   componentDidMount() {
     console.log(UPLOAD_TARGET) // for uploading aois
-    Panoptes.auth.checkCurrent()
-      .then(user => this.setState({user}))
+    auth.getUser()
+      .then(user => this.setState({user}));
   }
 
   componentWillUpdate() {
     // console.log('*** COMPONENT WILL UPDATE ***');
-    Panoptes.auth.checkCurrent()
-      .then(function(user) {
+    auth.getUser()
+      .then(user => {
         if(user && !this.state.projects) {
           this.fetchUserProjects()
         }
-      }.bind(this))
-  }
-
-  login() {
-    Panoptes.oauth.signIn('https://localhost:3443')
-  }
-
-  logout() {
-    Panoptes.oauth.signOut('http://www.google.com')
-      .then(user => this.setState({ user }));
+      })
   }
 
   fetchUserProjects() {
     if(this.state.user){
-      Panoptes.apiClient.type('projects').get( {owner: this.state.user.display_name} )
+      prnClient.get('projects', {owner: this.state.user.display_name} )
         .then(function (projects) {
           this.setState({projects: projects})
         }.bind(this))
@@ -130,12 +120,30 @@ export default class UploadPage extends React.Component {
         <label>Upload to subject set: &nbsp; </label>
         {this.renderSubjectSetSelector()}
 
-        <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET} className='uploader'>
-          <label htmlFor='file'>Drop a file here, or click to browse</label>
-          <input name='project_id' value={project_id} type='hidden'/>
-          <input name='subject_set_id' value={subject_set_id} type='hidden'/>
-          <input disabled={disabled} id='file' type='file' name='file'/>
+        <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET}>
+          <label>Number of times to repeat build &nbsp; </label>
+          <select id='repeat' name='repeat'>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          </select>
+          <br/>
+          <label>Interval between builds &nbsp; </label>
+          <select id='interval' name='interval'>
+          <option value='60'>1 min</option>
+          <option value='300'>5 mins</option>
+          <option value='3600'>1 hour</option>
+          <option value='86400'>1 day</option>
+          </select>
+          <div className='uploader'>
+            <label htmlFor='file'>Drop a file here, or click to browse</label>
+            <input name='project_id' value={project_id} type='hidden'/>
+            <input name='subject_set_id' value={subject_set_id} type='hidden'/>
+            <input disabled={disabled} id='file' type='file' name='file'/>
             <button type='submit'>Upload</button>
+          </div>
         </form>
       </span>
     )

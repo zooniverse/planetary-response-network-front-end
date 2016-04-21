@@ -18,7 +18,7 @@ export default class ProgressChecklist extends React.Component {
         <ul className='build-checklist'>
           {checklist.map(function(task,key){
             var taskStatus = ''
-            if( typeof this.props.status !== undefined && this.props.status !== null){
+            if(this.props.status){
               taskStatus = this.props.status[task.name].status
             }
             return <li key={key} className={taskStatus}>{task.title}</li>
