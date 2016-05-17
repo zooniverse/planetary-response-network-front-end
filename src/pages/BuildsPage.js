@@ -38,7 +38,7 @@ export default class BuildsPage extends React.Component {
       let builds = this.state.builds.map((build, i) => {
         return (
           <li key={i}>
-            <Link to={'builds/'+build.id}>{build.id}</Link>
+            <Link to={'builds/'+build.id}>{build.id}</Link>&nbsp;<i className='delete-build fa fa-times-circle'/>
           </li>
         )
       })
