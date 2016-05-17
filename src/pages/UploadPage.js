@@ -15,10 +15,12 @@ export default class UploadPage extends React.Component {
     this.state = {
       user: null,
       projectKey: null,
-      subjectSetKey: null
+      subjectSetKey: null,
+      providerKey: 'planet-api'
     }
-    this.updateSelectedProject = this.updateSelectedProject.bind(this)
+    this.updateSelectedProject    = this.updateSelectedProject.bind(this)
     this.updateSelectedSubjectSet = this.updateSelectedSubjectSet.bind(this)
+    this.updateSelectedProvider   = this.updateSelectedProvider.bind(this)
   }
 
   componentDidMount() {
@@ -57,6 +59,24 @@ export default class UploadPage extends React.Component {
     this.setState({
       subjectSetKey: el.target.value
     })
+  }
+
+  updateSelectedProvider(el) {
+    console.log('UPDATE!');
+    this.setState({
+      providerKey: el.target.value
+    }, function(){  console.log('PROVIDER = ', this.state.providerKey); })
+  }
+
+  renderProviderSelector() {
+    return(
+        <span>
+          &nbsp;
+          <input type='radio' name='provider' value='planet-api' defaultChecked={true} onChange={this.updateSelectedProvider}/>&nbsp;Planet Labs
+          &nbsp;
+          <input type='radio' name='provider' value='sentinel-2' onChange={this.updateSelectedProvider}/>&nbsp;ESA (Sentinel-2)
+        </span>
+    )
   }
 
   renderProjectSelector() {
@@ -109,11 +129,18 @@ export default class UploadPage extends React.Component {
   renderUploader() {
     // disable uploader until project_id and subject_set_id are selected
     var disabled = (this.state.projectKey && this.state.subjectSetKey) ? false : true
+    var provider = this.state.providerKey
     var project_id = this.state.projectKey ? this.state.projects[this.state.projectKey].id : ''
     var subject_set_id = (this.state.projectKey && this.state.subjectSetKey) ? this.state.projects[this.state.projectKey].links.subject_sets[this.state.subjectSetKey] : ''
 
     return(
       <span>
+
+        <label>Imagery Provider:</label>
+        {this.renderProviderSelector()}
+
+        <br/>
+
         <label>Use project: &nbsp; </label>
         {this.renderProjectSelector()}
         <br/>
@@ -139,6 +166,7 @@ export default class UploadPage extends React.Component {
           </select>
           <div className='uploader'>
             <label htmlFor='file'>Drop a file here, or click to browse</label>
+            <input name='provider' value={provider} type='hidden'/>
             <input name='project_id' value={project_id} type='hidden'/>
             <input name='subject_set_id' value={subject_set_id} type='hidden'/>
             <input disabled={disabled} id='file' type='file' name='file'/>
@@ -150,6 +178,7 @@ export default class UploadPage extends React.Component {
   }
 
   render() {
+    console.log('STATE: ', this.state);
     return (
       <DocumentTitle title='AOI Uploader'>
         <div className='UploadPage'>
