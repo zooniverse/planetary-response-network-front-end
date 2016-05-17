@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import React, { PropTypes } from 'react';
 import DocumentTitle from 'react-document-title';
 import Header from './Header'
@@ -12,6 +13,7 @@ export default class BuildsPage extends React.Component {
   constructor() {
     super()
     this.state = { status: null }
+    this.deleteBuild = this.deleteBuild.bind(this)
   }
 
   componentWillMount() {
@@ -28,26 +30,42 @@ export default class BuildsPage extends React.Component {
       )
   }
 
+  deleteBuild(build) {
+    console.log('deleteBuild: ', build);
+    prnClient.post('build/delete', build.id).then(
+      builds => this.setState({ builds })
+    )
+  }
+
   updateBuildStatus(payload) {
     console.log('updateBuildStatus()', payload)
     this.setState({status: JSON.parse(payload) })
   }
 
   renderBuildList() {
-    if (this.state.builds) {
-      let builds = this.state.builds.map((build, i) => {
+    console.log('this.state.builds = ', this.state.builds);
+    if (this.state.builds != null && this.state.builds !== 'undefined') {
+      if (this.state.builds.length > 0) {
+        let builds = this.state.builds.map((build, i) => {
+          return (
+            <li key={i}>
+              <Link to={'builds/'+build.id}>{build.id}</Link>&nbsp;
+              <i className='delete-build fa fa-times-circle' onClick={this.deleteBuild.bind(null, build)}/>
+            </li>
+          )
+        })
         return (
-          <li key={i}>
-            <Link to={'builds/'+build.id}>{build.id}</Link>&nbsp;<i className='delete-build fa fa-times-circle'/>
-          </li>
+          <ul>
+            {builds}
+          </ul>
         )
-      })
-      return (
-        <ul>
-          {builds}
-        </ul>
-      )
-    }
+      }
+      else {
+        return (
+          <p>You've got no active builds.</p>
+        )
+      }
+    } else return null;
   }
 
   render() {

@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, IndexRoute, Route } from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { Router, IndexRoute, Route, useRouterHistory } from 'react-router';
 import { IndexPage, UploadPage, BuildsPage, SettingsPage, LoginPage } from './pages';
 import Build from './components/Build';
+import { createHashHistory } from 'history';
+
+// useRouterHistory creates a composable higher-order function
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 
 ReactDOM.render(
-  <Router history={createBrowserHistory()}>
+  <Router history={appHistory}>
     <Route path='/'             component={IndexPage}/>
     <Route path='/upload'       component={UploadPage}/>
     <Route path='/builds'       component={BuildsPage}>
