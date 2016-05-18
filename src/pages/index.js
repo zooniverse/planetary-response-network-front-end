@@ -1,5 +1,5 @@
 export IndexPage    from './IndexPage'
 export UploadPage   from './UploadPage'
-export BuildsPage   from './BuildsPage'
+export JobsPage     from './JobsPage'
 export SettingsPage from './SettingsPage'
 export LoginPage    from './LoginPage'

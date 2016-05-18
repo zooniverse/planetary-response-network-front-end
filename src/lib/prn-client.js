@@ -3,8 +3,8 @@ import querystring from 'querystring';
 import config from '../config.json'
 
 const SUPPORTED_TYPES = [
-	'builds',
-	'build/delete',
+	'jobs',
+	'job/delete',
 	'projects',
 	'subject-sets'
 ];

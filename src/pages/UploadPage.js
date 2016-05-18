@@ -6,7 +6,7 @@ import Header from './Header'
 import auth from '../lib/auth'
 import prnClient from '../lib/prn-client'
 
-const UPLOAD_TARGET = server + '/aois?redirect=https://localhost:3443/#/builds'
+const UPLOAD_TARGET = server + '/aois?redirect=https://localhost:3443/#/jobs'
 
 export default class UploadPage extends React.Component {
 
@@ -148,7 +148,7 @@ export default class UploadPage extends React.Component {
         {this.renderSubjectSetSelector()}
 
         <form method='POST' encType='multipart/form-data' action={UPLOAD_TARGET}>
-          <label>Number of times to repeat build &nbsp; </label>
+          <label>Number of times to repeat job &nbsp; </label>
           <select id='repeat' name='repeat'>
           <option>1</option>
           <option>2</option>
@@ -157,7 +157,7 @@ export default class UploadPage extends React.Component {
           <option>5</option>
           </select>
           <br/>
-          <label>Interval between builds &nbsp; </label>
+          <label>Interval between jobs &nbsp; </label>
           <select id='interval' name='interval'>
           <option value='60'>1 min</option>
           <option value='300'>5 mins</option>

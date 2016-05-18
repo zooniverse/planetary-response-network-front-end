@@ -1,46 +1,46 @@
 import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
-import BuildProgress from './BuildProgress'
+import JobProgress from './JobProgress'
 import io from 'socket.io-client'
 import config from '../config.json'
 import prnClient from '../lib/prn-client'
 
 const socket = io.connect(config.server, {secure: true})
 
-export default class Build extends React.Component {
+export default class Job extends React.Component {
 
   constructor() {
     super()
     this.state = {
-      build: {}
+      job: {}
     }
-    this.updateBuildStatus = this.updateBuildStatus.bind(this)
+    this.updateJobStatus = this.updateJobStatus.bind(this)
   }
 
-  setBuildById(id) {
-    prnClient.get('builds')
+  setJobById(id) {
+    prnClient.get('jobs')
       .then(
-        builds => {
-          let build = builds.filter(build => {
-            return build.id === id
+        jobs => {
+          let job = jobs.filter(job => {
+            return job.id === id
           })
-          this.setState({ build: build.pop() })
+          this.setState({ job: job.pop() })
         },
-        reason => alert('Build #'+id+' doesn\'t exist')
+        reason => alert('Job #'+id+' doesn\'t exist')
       )
   }
 
   componentWillMount() {
-    // Fetch build
+    // Fetch job
     this.subscribeToJob(this.props.params.id)
-    this.setBuildById(this.props.params.id)
+    this.setJobById(this.props.params.id)
   }
 
   componentWillReceiveProps(newProps, oldProps) {
     if (!oldProps.params || oldProps.params.id !== newProps.params.id) {
       if (oldProps.params && oldProps.params.id) this.unsubscribeFromJob(oldProps.params.id);
       this.subscribeToJob(newProps.params.id)
-      this.setBuildById(this.props.params.id)
+      this.setJobById(this.props.params.id)
     }
   }
 
@@ -50,33 +50,33 @@ export default class Build extends React.Component {
   }
 
   subscribeToJob(id) {
-    // Subscribe to build statuses
+    // Subscribe to job statuses
     var subChannel = 'status:'+this.props.params.id
-    socket.on(subChannel, this.updateBuildStatus)
+    socket.on(subChannel, this.Job)
     socket.on('connect', function(){
       console.log('Socket connected. Listening to channel: ', subChannel);
     })
   }
 
-  updateBuildStatus(payload) {
-    var updatedBuild = Object.assign(this.state.build, { status: JSON.parse(payload) })
+  updateJobStatus(payload) {
+    var updatedJob = Object.assign(this.state.job, { status: JSON.parse(payload) })
     this.setState({
-      build: updatedBuild
+      job: updatedJob
     })
   }
 
   render() {
-    var buildProgressDisplay = null;
-    if (this.state.build) {
-      if (!this.state.build.status) this.state.build.status = null
-      buildProgressDisplay = <BuildProgress status={this.state.build.status} />
+    var jobProgressDisplay = null;
+    if (this.state.job) {
+      if (!this.state.job.status) this.state.job.status = null
+      jobProgressDisplay = <JobProgress status={this.state.job.status} />
     }
     return (
-      <div className="build">
+      <div className="job">
         <strong>
-          Current Build Status
+          Current Job Status
           ({this.props.params.id})
-          {buildProgressDisplay}
+          {jobProgressDisplay}
         </strong>
       </div>
     );
