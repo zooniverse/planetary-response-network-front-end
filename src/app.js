@@ -5,6 +5,8 @@ import { IndexPage, UploadPage, JobsPage, SettingsPage, LoginPage } from './page
 import Job from './components/Job';
 import { createHashHistory } from 'history';
 
+import css from './styl/app.styl'; // Just the CSS
+
 // useRouterHistory creates a composable higher-order function
 const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 

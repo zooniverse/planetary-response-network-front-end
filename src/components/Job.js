@@ -52,7 +52,7 @@ export default class Job extends React.Component {
   subscribeToJob(id) {
     // Subscribe to job statuses
     var subChannel = 'status:'+this.props.params.id
-    socket.on(subChannel, this.Job)
+    socket.on(subChannel, this.updateJobStatus);
     socket.on('connect', function(){
       console.log('Socket connected. Listening to channel: ', subChannel);
     })
