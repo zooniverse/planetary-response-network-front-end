@@ -26,8 +26,10 @@ export default class JobsPage extends React.Component {
 
   deleteJob(job) {
     console.log('deleteJob: ', job);
-    prnClient.post('job/delete', job.id).then(
-      jobs => this.setState({ jobs })
+    let jobs = this.state.jobs;
+    jobs = jobs.filter(ajob => ajob !== job);
+    prnClient.delete('jobs', job.id).then(
+      () => this.setState({ jobs })
     )
   }
 

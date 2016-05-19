@@ -4,7 +4,6 @@ import config from '../config.json'
 
 const SUPPORTED_TYPES = [
 	'jobs',
-	'job/delete',
 	'projects',
 	'subject-sets'
 ];
@@ -57,6 +56,23 @@ class PrnClient {
 			});
 		});
 
+	}
+
+	delete(type, query) {
+		if (SUPPORTED_TYPES.indexOf(type) === -1) return Promise.reject('Unknown type');
+		let qs = '/'+query;
+		return new Promise((resolve, reject) => {
+			xhr.del({
+				url: config.server+'/'+type+qs,
+				withCredentials: true
+			}, (err, resp, items) => {
+				if (err) reject(err)
+				if (resp.statusCode < 200 || resp.statusCode >= 400) {
+					return reject(resp.body)
+				}
+				resolve();
+			});
+		});
 	}
 }
 
