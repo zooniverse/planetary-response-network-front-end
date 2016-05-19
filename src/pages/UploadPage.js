@@ -41,7 +41,7 @@ export default class UploadPage extends React.Component {
 
   fetchUserProjects() {
     if(this.state.user){
-      prnClient.get('projects', {owner: this.state.user.display_name} )
+      prnClient.get('projects', {owner: this.state.user.displayName} )
         .then(function (projects) {
           this.setState({projects: projects})
         }.bind(this))
