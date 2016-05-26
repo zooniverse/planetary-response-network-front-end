@@ -24,7 +24,7 @@ export default class Header extends React.Component {
           <div className="navbar-header">
             <button type="button" data-toggle="collapse" data-target="#navbar-collapse" className="navbar-toggle collapsed">
               <span className="sr-only">Toggle Navigation</span>
-              <span className="icon-bar"></span><span className="icon-bar"></span><span className="icon-bar"></span>
+              <span className="icon-bar"></span><i className="fa fa-bars fa-2x"/><span className="icon-bar"></span>
             </button>
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
