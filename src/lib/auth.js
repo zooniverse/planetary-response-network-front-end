@@ -8,7 +8,7 @@ class Auth {
 	}
 
 	logout() {
-		window.location = server+'/auth/logout?redirect=https://localhost:3443/jobs';
+		window.location = server+'/auth/logout?redirect=https://localhost:3443';
 	}
 
 	getUser(done) {
