@@ -2,12 +2,13 @@ var morgan     = require('morgan')
 var path       = require('path')
 var express    = require('express')
 var webpack    = require('webpack')
-var config     = require('./webpack.config')
+var wpConfig   = require('./webpack.config')
 var https      = require('https')
 var fs         = require('fs')
+var config     = require('./src/config.json')
 
 var app = express()
-var compiler = webpack(config)
+var compiler = webpack(wpConfig)
 
 app.use(morgan('combined'))
 
@@ -28,10 +29,10 @@ var credentials = {
 };
 
 var httpsServer = https.createServer(credentials, app)
-httpsServer.listen(3443, function(error){
+httpsServer.listen(config.port, function(error){
   if (error){
     console.log(error)
   } else {
-    console.log('Server listening on port: 3443')
+    console.log('Server listening on port: %d', config.port)
   }
 })

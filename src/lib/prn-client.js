@@ -16,7 +16,7 @@ class PrnClient {
 
 		return new Promise((resolve, reject) => {
 			xhr({
-				url: config.server+'/'+type+qs,
+				url: config.apiRoot+'/'+type+qs,
 				withCredentials: true
 			}, (err, resp, items) => {
 				if (err) reject(err)
@@ -40,7 +40,7 @@ class PrnClient {
 		let qs = '/'+query;
 		return new Promise((resolve, reject) => {
 			xhr.post({
-				url: config.server+'/'+type+qs,
+				url: config.apiRoot+'/'+type+qs,
 				withCredentials: true
 			}, (err, resp, items) => {
 				if (err) reject(err)
@@ -63,7 +63,7 @@ class PrnClient {
 		let qs = '/'+query;
 		return new Promise((resolve, reject) => {
 			xhr.del({
-				url: config.server+'/'+type+qs,
+				url: config.apiRoot+'/'+type+qs,
 				withCredentials: true
 			}, (err, resp, items) => {
 				if (err) reject(err)

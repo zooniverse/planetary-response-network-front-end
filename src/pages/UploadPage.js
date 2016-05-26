@@ -1,12 +1,14 @@
-import {server} from '../config.json'
+import config from '../config.json'
 import { Link } from 'react-router'
 import React, { PropTypes } from 'react'
 import DocumentTitle from 'react-document-title'
+import url from 'url'
 import Header from './Header'
 import auth from '../lib/auth'
 import prnClient from '../lib/prn-client'
 
-const UPLOAD_TARGET = server + '/aois?redirect=https://localhost:3443/#/jobs'
+const ROOT = url.format(config)
+const UPLOAD_TARGET = config.apiRoot + '/aois?redirect='+ROOT+'/#/jobs'
 
 export default class UploadPage extends React.Component {
 

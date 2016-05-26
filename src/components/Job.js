@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 import config from '../config.json'
 import prnClient from '../lib/prn-client'
 
-const socket = io.connect(config.server, {secure: true})
+const socket = io.connect(config.apiRoot, {secure: true})
 
 export default class Job extends React.Component {
 

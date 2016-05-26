@@ -1,20 +1,22 @@
 import xhr from 'xhr';
-import {server} from '../config.json'
+import url from 'url';
+import config from '../config.json'
 
+const ROOT = url.format(config)
 
 class Auth {
 	login() {
-		window.location = server+'/auth/login?redirect=https://localhost:3443/jobs';
+		window.location = config.apiRoot+'/auth/login?redirect='+ROOT+'/jobs';
 	}
 
 	logout() {
-		window.location = server+'/auth/logout?redirect=https://localhost:3443';
+		window.location = config.apiRoot+'/auth/logout?redirect='+ROOT;
 	}
 
 	getUser(done) {
 		return new Promise((resolve, reject) => {
 			xhr({
-				url: server+'/auth/me',
+				url: config.apiRoot+'/auth/me',
 				withCredentials: true
 			}, (err, resp, profile) => {
 				if (err) {
