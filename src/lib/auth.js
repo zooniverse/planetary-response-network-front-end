@@ -6,7 +6,7 @@ const ROOT = url.format(config)
 
 class Auth {
 	login() {
-		window.location = config.apiRoot+'/auth/login?redirect='+ROOT+'/jobs';
+		window.location = config.apiRoot+'/auth/login?redirect='+ROOT+'/#/jobs';
 	}
 
 	logout() {
