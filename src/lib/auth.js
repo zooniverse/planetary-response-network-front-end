@@ -1,20 +1,19 @@
 import xhr from 'xhr';
-import {server} from '../config.json'
-
+import {host, client} from '../config.js' // get PRN host
 
 class Auth {
 	login() {
-		window.location = server+'/auth/login?redirect=https://localhost:3443/builds';
+		window.location = host+'/auth/login?redirect='+client+'/jobs';
 	}
 
 	logout() {
-		window.location = server+'/auth/logout?redirect=https://localhost:3443/builds';
+		window.location = host+'/auth/logout?redirect='+client+'/jobs';
 	}
 
 	getUser(done) {
 		return new Promise((resolve, reject) => {
 			xhr({
-				url: server+'/auth/me',
+				url: host+'/auth/me',
 				withCredentials: true
 			}, (err, resp, profile) => {
 				if (err) {
