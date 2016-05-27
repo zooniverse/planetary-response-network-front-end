@@ -7,7 +7,7 @@ import Header from './Header'
 import auth from '../lib/auth'
 import prnClient from '../lib/prn-client'
 
-const UPLOAD_TARGET = host+'/aois?redirect='+client+'/builds'
+const UPLOAD_TARGET = host+'/aois?redirect='+client+'/#/jobs'
 
 export default class UploadPage extends React.Component {
 
