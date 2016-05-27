@@ -4,11 +4,11 @@ import {host, client} from '../config.js' // get PRN host
 class Auth {
 	login() {
 
-		window.location = host+'/auth/login?redirect='+client+'/jobs';
+		window.location = host+'/auth/login?redirect='+client+'/#/jobs';
 	}
 
 	logout() {
-		window.location = host+'/auth/logout?redirect='+client+'/jobs';
+		window.location = host+'/auth/logout?redirect='+client+'/#/jobs';
 	}
 
 	getUser(done) {
