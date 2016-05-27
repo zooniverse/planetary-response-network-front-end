@@ -11,7 +11,7 @@ class Jobs {
 
 	findAll(callback) {
 		xhr({
-			url: config.server+'/jobs',
+			url: config.apiRoot+'/jobs',
 			withCredentials: true
 		}, (err, resp, jobs) => {
 			if (err) return callback(err)

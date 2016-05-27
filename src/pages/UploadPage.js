@@ -2,6 +2,7 @@ import {host, client} from '../config.js' // get PRN host
 import { Link } from 'react-router'
 import React, { PropTypes } from 'react'
 import DocumentTitle from 'react-document-title'
+import url from 'url'
 import Header from './Header'
 import auth from '../lib/auth'
 import prnClient from '../lib/prn-client'
@@ -51,9 +52,18 @@ export default class UploadPage extends React.Component {
   }
 
   updateSelectedProject(el) {
+    var projectKey = el.target.value
     this.setState({
-      projectKey: el.target.value,
+      projectKey: projectKey,
       subjectSetKey: null
+    })
+    prnClient.get('subject-sets', { project_id: this.state.projects[projectKey].id })
+    .then(subjectSets => {
+      this.setState({ subjectSets })
+    })
+    .catch(err => {
+      console.error('Failed to fetch/store subject sets for project. Error was: %s', err)
+      alert('Error fetching subject sets')
     })
   }
 
@@ -104,15 +114,11 @@ export default class UploadPage extends React.Component {
     var subjectSetKey = this.state.subjectSetKey
     var projects = this.state.projects
 
-    if(projects && projectKey) {
-      var subjectSets = projects[projectKey].links.subject_sets
-      console.log('SUBJECT_SETS = ', subjectSets);
-    }
 
     /* Generate subject set options, or null if none available */
-    var subjectSetOptions = subjectSets ?
-      subjectSets.map(function(subjectSetId, key){
-        return(<option key={key} value={key}>{subjectSetId}</option>)
+    var subjectSetOptions = this.state.subjectSets ?
+      this.state.subjectSets.map(function(subjectSet, key){
+        return(<option key={key} value={key}>{subjectSet.display_name}</option>)
       }) : null
 
     var value = subjectSetKey ? subjectSetKey : 'default'
