@@ -24,9 +24,13 @@ export default class UploadPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log(UPLOAD_TARGET) // for uploading aois
+    console.log('Upload Target: ', UPLOAD_TARGET) // for uploading aois
     auth.getUser()
-      .then(user => this.setState({user}));
+      .then(user => {
+          console.log('FOUND USER: ', user);
+          this.setState({user})
+        }
+      );
   }
 
   componentWillUpdate() {

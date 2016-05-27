@@ -7,7 +7,7 @@ var DEFAULT_ENV = 'staging';
 var	PRN_HOSTS = {
 	production:   null, // TBD
 	development: 'https://52.38.229.223:3736',
-	staging:     'https://192.168.99.100:3736' //'https://52.38.229.223:3736',
+	staging:     'https://52.38.229.223:3736'//'https://192.168.99.100:3736' //'https://52.38.229.223:3736',
 }
 
 var PRN_CLIENTS = {

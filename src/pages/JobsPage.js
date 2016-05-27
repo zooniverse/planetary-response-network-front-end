@@ -5,7 +5,6 @@ import DocumentTitle from 'react-document-title';
 import Header from './Header'
 import JobProgress from '../components/JobProgress'
 import io from 'socket.io-client'
-import config from '../config.json'
 import prnClient from '../lib/prn-client'
 
 export default class JobsPage extends React.Component {

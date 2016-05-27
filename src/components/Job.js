@@ -2,10 +2,10 @@ import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 import JobProgress from './JobProgress'
 import io from 'socket.io-client'
-import config from '../config.json'
+import {host} from '../config.js'
 import prnClient from '../lib/prn-client'
 
-const socket = io.connect(config.server, {secure: true})
+const socket = io.connect(host, {secure: true})
 
 export default class Job extends React.Component {
 
