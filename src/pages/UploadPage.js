@@ -24,10 +24,8 @@ export default class UploadPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Upload Target: ', UPLOAD_TARGET) // for uploading aois
     auth.getUser()
       .then(user => {
-          console.log('FOUND USER: ', user);
           this.setState({user})
         }
       );
@@ -66,7 +64,6 @@ export default class UploadPage extends React.Component {
   }
 
   updateSelectedProvider(el) {
-    console.log('UPDATE!');
     this.setState({
       providerKey: el.target.value
     }, function(){  console.log('PROVIDER = ', this.state.providerKey); })

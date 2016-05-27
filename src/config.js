@@ -7,7 +7,7 @@ var DEFAULT_ENV = 'staging';
 var	PRN_HOSTS = {
 	production:   null, // TBD
 	development: 'https://52.38.229.223:3736',
-	staging:     'https://52.38.229.223:3736'//'https://192.168.99.100:3736' //'https://52.38.229.223:3736',
+	staging:     'https://192.168.99.100:3736' //'https://52.38.229.223:3736',
 }
 
 var PRN_CLIENTS = {
@@ -17,25 +17,20 @@ var PRN_CLIENTS = {
 }
 
 // determine environment
-var envFromBrowser = locationMatch(/\W?env=(\w+)/);
 var envFromShell = process.env.NODE_ENV;
-var env = envFromBrowser || envFromShell || DEFAULT_ENV;
-console.log('ENV = ', env);
+var env = envFromShell || DEFAULT_ENV;
 
 // set client
 var clientFromShell = process.env.PRN_CLIENT;
 var client = clientFromShell || PRN_CLIENTS[env];
 console.log('USING PRN CLIENT: ', client); // DEBUG CODE
 
-
 // set host
-var hostFromBrowser = locationMatch(/\W?prn-host=([^&]+)/);
 var hostFromShell = process.env.PRN_HOST;
-var host = hostFromBrowser || hostFromShell || PRN_HOSTS[env];
+var host = hostFromShell || PRN_HOSTS[env];
 console.log('USING PRN HOST: ', host); // DEBUG CODE
 
-
-if (!env.match(/^(production|staging|development|local)$/)) {
+if (!env.match(/^(production|staging|development)$/)) {
   throw new Error('Planetary Response Network (client): Invalid Environment; ' +
     'try setting NODE_ENV to "staging" instead of "'+envFromShell+'".');
 }
@@ -50,7 +45,6 @@ function locationMatch(regex) {
 
   return (match && match[1]) ? match[1] : undefined;
 }
-
 
 module.exports = {
   host: host,
